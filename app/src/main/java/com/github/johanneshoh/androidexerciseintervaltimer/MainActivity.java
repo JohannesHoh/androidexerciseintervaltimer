@@ -84,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
         buttonMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int currentValue = Integer.valueOf(numberOfSetsText.getText().toString());
-                if(currentValue > 0) {
+                int currentValue = getNoOfSetsValue();
+                if(currentValue > 1) {
                     numberOfSetsText.setText(Integer.valueOf(currentValue - 1).toString());
                 }
             }
@@ -94,13 +94,13 @@ public class MainActivity extends AppCompatActivity {
         buttonPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int currentValue = Integer.valueOf(numberOfSetsText.getText().toString());
+                int currentValue = getNoOfSetsValue();
                 numberOfSetsText.setText(Integer.valueOf(currentValue + 1).toString());
             }
         });
 
 
-        // set actions
+        // set activity
 
         final Intent intent = new Intent(this, TimerRunningActivity.class);
         Button buttonStartView = findViewById(R.id.buttonStart);
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                int noOfSets = Integer.valueOf(numberOfSetsText.getText().toString());
+                int noOfSets = getNoOfSetsValue();
                 int eTimeMin = exerciseTimeMinNumberPickerView.getValue();
                 int eTimeSec = exerciseTimeSecNumberPickerView.getValue();
                 int pTimeMin = pauseTimeMinNumberPickerView.getValue();
@@ -120,6 +120,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private int getNoOfSetsValue() {
+        int noOfSets = 1;
+        String setsText = numberOfSetsText.getText().toString();
+        if(!"".equals(setsText)){
+            noOfSets = Integer.valueOf(setsText);
+        }
+        return noOfSets;
     }
 }
 

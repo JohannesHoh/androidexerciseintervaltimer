@@ -10,6 +10,9 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
@@ -21,8 +24,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="beep volume"
-            android:gravity="center_horizontal"/>
+            android:gravity="center_horizontal"
+            android:text="beep volume" />
 
         <SeekBar
             android:id="@+id/seekBar"
@@ -32,6 +35,30 @@
             tools:layout_editor_absoluteX="176dp"
             tools:layout_editor_absoluteY="93dp" />
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextureView
+                android:id="@+id/textureView1"
+                android:layout_width="wrap_content"
+                android:layout_height="5dp" />
+            <TextureView
+                android:id="@+id/textureView2"
+                android:layout_width="wrap_content"
+                android:layout_height="5dp" />
+            <TextureView
+                android:id="@+id/textureView3"
+                android:layout_width="wrap_content"
+                android:layout_height="5dp" />
+            <TextureView
+                android:id="@+id/textureView4"
+                android:layout_width="wrap_content"
+                android:layout_height="5dp" />
+
+        </LinearLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -53,18 +80,67 @@
                 android:id="@+id/imageSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                android:layout_marginTop="20dp"
                 android:src="@drawable/ic_transfer_within_a_station_24px" />
 
         </FrameLayout>
 
-        <TextView
-            android:id="@+id/currentTimeTextView"
+        <LinearLayout
+            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal|center_vertical"
-            android:text="70"
-            android:textSize="110sp" />
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:layout_marginRight="10dp">
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+v
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|bottom"
+                    android:text="sets"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/setsRemainaingTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:gravity="center_horizontal|top"
+                    android:text="10"
+                    android:textSize="110sp" />
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="seconds"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/currentTimeTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:gravity="center_horizontal|top"
+                    android:text="70"
+                    android:textSize="110sp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
 
         <FrameLayout
             android:layout_width="wrap_content"
