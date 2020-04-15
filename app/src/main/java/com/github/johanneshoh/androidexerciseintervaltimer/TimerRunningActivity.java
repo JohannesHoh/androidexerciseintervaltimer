@@ -67,9 +67,9 @@ public class TimerRunningActivity extends AppCompatActivity {
 
         TimerRunningActivity.timer = new CountDownTimer(TimerRunningActivity.timeIntervals.get(TimerRunningActivity.currentTimerIndex) * 1000, 1000) {
 
-            ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, TimerRunningActivity.beepVolume);
 
             public void onTick(long millisUntilFinished) {
+                ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, TimerRunningActivity.beepVolume);
                 TimerRunningActivity.timerValue = Long.valueOf(millisUntilFinished / 1000).intValue();
                 TextView ctv = ((TextView)findViewById(R.id.currentTimeTextView));
                 String text = Integer.valueOf(TimerRunningActivity.timerValue).toString();

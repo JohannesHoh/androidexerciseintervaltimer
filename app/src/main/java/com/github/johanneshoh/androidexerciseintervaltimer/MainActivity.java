@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         pauseTimeMinNumberPickerView.setMinValue(0);
         pauseTimeMinNumberPickerView.setMaxValue(99);
 
-        pauseTimeSecNumberPickerView.setMinValue(1);
+        pauseTimeSecNumberPickerView.setMinValue(0);
         pauseTimeSecNumberPickerView.setMaxValue(59);
 
 
