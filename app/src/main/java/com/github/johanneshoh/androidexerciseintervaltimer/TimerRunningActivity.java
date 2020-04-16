@@ -77,17 +77,22 @@ public class TimerRunningActivity extends AppCompatActivity {
 
                 updateRemainingSets();
 
+                int toneLength = 150;
+                if(TimerRunningActivity.timerValue <= 3){
+                    toneLength = 150;
+                }
+
                 ImageView imgW = findViewById(R.id.imageWorkout);
                 ImageView imgP = findViewById(R.id.imageSwitch);
                 if(TimerRunningActivity.currentTimerIndex % 2 == 0){
                     imgW.setRotation(imgW.getRotation() + 45);
                     imgP.setVisibility(ImageView.INVISIBLE);
                     imgW.setVisibility(ImageView.VISIBLE);
-                    toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP,150);
+                    toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP,toneLength);
                 } else {
                     imgW.setVisibility(ImageView.INVISIBLE);
                     imgP.setVisibility(ImageView.VISIBLE);
-                    toneGen1.startTone(ToneGenerator.TONE_CDMA_ONE_MIN_BEEP,150);
+                    toneGen1.startTone(ToneGenerator.TONE_CDMA_ONE_MIN_BEEP,toneLength);
                 }
 
             }

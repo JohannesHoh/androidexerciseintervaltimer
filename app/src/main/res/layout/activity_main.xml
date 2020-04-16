@@ -10,7 +10,7 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="658dp"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,25 +22,26 @@
             android:id="@+id/fragment_main_set_sets"
             android:name="com.github.johanneshoh.androidexerciseintervaltimer.MainSetSetsFragment"
             android:layout_width="match_parent"
-            android:layout_height="100dp" />
+            android:layout_height="150dp" />
 
         <fragment
             android:id="@+id/fragment_main_set_times1"
             android:name="com.github.johanneshoh.androidexerciseintervaltimer.MainSetTimes1Fragment"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="250dp" />
 
         <fragment
             android:id="@+id/fragment_main_set_times2"
             android:name="com.github.johanneshoh.androidexerciseintervaltimer.MainSetTimes2Fragment"
             android:layout_width="match_parent"
-            android:layout_height="200dp" />
+            android:layout_height="250dp" />
 
         <Button
             android:id="@+id/buttonStart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="start" />
+            android:text="start"
+            />
 
     </LinearLayout>
 
