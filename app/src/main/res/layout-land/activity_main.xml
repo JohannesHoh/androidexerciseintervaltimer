@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <fragment
+            android:id="@+id/fragment_main_set_sets"
+            android:name="com.github.johanneshoh.androidexerciseintervaltimer.MainSetSetsFragment"
+            android:layout_width="600dp"
+            android:layout_height="100dp" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <fragment
+                android:id="@+id/fragment_main_set_times1"
+                android:name="com.github.johanneshoh.androidexerciseintervaltimer.MainSetTimes1Fragment"
+                android:layout_width="300dp"
+                android:layout_height="match_parent" />
+
+            <fragment
+                android:id="@+id/fragment_main_set_times2"
+                android:name="com.github.johanneshoh.androidexerciseintervaltimer.MainSetTimes2Fragment"
+                android:layout_width="300dp"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/buttonStart"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:text="start" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
