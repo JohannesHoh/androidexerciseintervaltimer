@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TimerRunning1Fragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageWorkout"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:src="@drawable/ic_fitness_center_24px" />
+
+            <ImageView
+                android:id="@+id/imageDone"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:src="@drawable/ic_done_24px" />
+
+            <ImageView
+                android:id="@+id/imageSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:src="@drawable/ic_transfer_within_a_station_24px" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginRight="10dp">
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                v
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|bottom"
+                    android:text="sets"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/setsRemainaingTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:gravity="center_horizontal|top"
+                    android:text="10"
+                    android:textSize="110sp" />
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginLeft="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="seconds"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/currentTimeTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:gravity="center_horizontal|top"
+                    android:text="70"
+                    android:textSize="110sp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

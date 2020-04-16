@@ -6,16 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".TimerRunningActivity">
 
-
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:gravity="center_horizontal"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,15 +23,14 @@
         <fragment
             android:id="@+id/fragment"
             android:name="com.github.johanneshoh.androidexerciseintervaltimer.TimerRunning1Fragment"
-            android:layout_width="match_parent"
-            android:layout_height="300dp" />
+            android:layout_width="300dp"
+            android:layout_height="match_parent" />
 
         <fragment
             android:id="@+id/fragment2"
             android:name="com.github.johanneshoh.androidexerciseintervaltimer.TimerRunning2Fragment"
-            android:layout_width="match_parent"
-            android:layout_height="300dp" />
-
+            android:layout_width="300dp"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 
