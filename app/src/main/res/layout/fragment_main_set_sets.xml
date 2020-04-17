@@ -21,7 +21,7 @@
             android:ems="10"
             android:gravity="center_horizontal"
             android:inputType="textPersonName"
-            android:text="SETS"
+            android:text="@string/sets_headline"
             android:textSize="30sp" />
 
         <LinearLayout
@@ -34,7 +34,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="-" />
+                android:text="-"
+                tools:ignore="HardcodedText" />
 
             <EditText
                 android:id="@+id/numberOfSetsText"
@@ -46,14 +47,16 @@
                 android:gravity="center_horizontal"
                 android:inputType="number"
                 android:text="1"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                tools:ignore="HardcodedText" />
 
             <Button
                 android:id="@+id/buttonPlus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="+" />
+                android:text="+"
+                tools:ignore="HardcodedText" />
         </LinearLayout>
 
     </LinearLayout>

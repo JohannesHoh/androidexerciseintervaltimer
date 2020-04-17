@@ -23,13 +23,13 @@
         <fragment
             android:id="@+id/fragment"
             android:name="com.github.johanneshoh.androidexerciseintervaltimer.TimerRunning1Fragment"
-            android:layout_width="300dp"
+            android:layout_width="350dp"
             android:layout_height="match_parent" />
 
         <fragment
             android:id="@+id/fragment2"
             android:name="com.github.johanneshoh.androidexerciseintervaltimer.TimerRunning2Fragment"
-            android:layout_width="300dp"
+            android:layout_width="350dp"
             android:layout_height="match_parent" />
     </LinearLayout>
 

@@ -91,20 +91,20 @@ public class TimerRunningActivity extends AppCompatActivity {
                     imgGetReady.setVisibility(ImageView.VISIBLE);
                     imgP.setVisibility(ImageView.INVISIBLE);
                     imgW.setVisibility(ImageView.INVISIBLE);
-                    textViewInstructionsText.setText("get ready");
+                    textViewInstructionsText.setText(R.string.done);
                     toneGen1.startTone(ToneGenerator.TONE_CDMA_ONE_MIN_BEEP,toneLength);
                 } else if(currentMetaInfo.equals(TimeMetaDataEnum.WORKOUT)) {
                     imgW.setRotation(imgW.getRotation() + 45);
                     imgGetReady.setVisibility(ImageView.INVISIBLE);
                     imgP.setVisibility(ImageView.INVISIBLE);
                     imgW.setVisibility(ImageView.VISIBLE);
-                    textViewInstructionsText.setText("do exercise");
+                    textViewInstructionsText.setText(R.string.do_exercise);
                     toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, toneLength);
                 } else if(currentMetaInfo.equals(TimeMetaDataEnum.PAUSE)){
                     imgGetReady.setVisibility(ImageView.INVISIBLE);
                     imgW.setVisibility(ImageView.INVISIBLE);
                     imgP.setVisibility(ImageView.VISIBLE);
-                    textViewInstructionsText.setText("pause");
+                    textViewInstructionsText.setText(R.string.pause);
                     toneGen1.startTone(ToneGenerator.TONE_CDMA_ONE_MIN_BEEP,toneLength);
                 }
 
@@ -119,11 +119,10 @@ public class TimerRunningActivity extends AppCompatActivity {
                 if(TimerRunningActivity.currentTimerIndex < TimerRunningActivity.timeIntervals.size()){
                     startTimerOrResumeTimer();
                 } else {
-                    //((TextView)findViewById(R.id.currentTimeTextView)).setText("done!");
                     findViewById(R.id.imageWorkout).setVisibility(ImageView.INVISIBLE);
                     findViewById(R.id.imageDone).setVisibility(ImageView.VISIBLE);
                     findViewById(R.id.imageButtonPause).setVisibility(ImageView.INVISIBLE);
-                    ((TextView)findViewById(R.id.instructionsText)).setText("done");
+                    ((TextView)findViewById(R.id.instructionsText)).setText(R.string.done);
                 }
             }
 

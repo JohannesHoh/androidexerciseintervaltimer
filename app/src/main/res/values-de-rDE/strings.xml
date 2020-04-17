@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">INTERVAL WORKOUT TIMER</string>
+    <string name="get_ready">fertig machen</string>
+    <string name="done">geschafft</string>
+    <string name="do_exercise">" "</string>
+    <string name="pause">Pause</string>
+    <string name="beep_volume">Lautstärke</string>
+    <string name="sets_headline">"WIEDERHOLUNGEN "</string>
+    <string name="seconds">Sekunden</string>
+    <string name="excercise_time_headline">ÜBUNGSZEIT</string>
+    <string name="pause_time_headline">PAUSENZEIT</string>
+    <string name="sets">Wiederholungen</string>
+</resources>
