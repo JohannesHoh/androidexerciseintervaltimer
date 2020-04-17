@@ -12,6 +12,15 @@
         android:orientation="vertical"
         >
 
+        <TextView
+            android:id="@+id/instructionsText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="get ready"
+            android:layout_marginBottom="20dp"
+            android:textSize="20sp" >
+        </TextView>
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

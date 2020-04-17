@@ -14,12 +14,14 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class TimerRunningActivity extends AppCompatActivity {
 
     private static enum TimeMetaDataEnum {
-        GET_STARTED, WORKOUT, PAUSE;
+        GET_READY, WORKOUT, PAUSE;
 
     }
 
@@ -63,14 +65,12 @@ public class TimerRunningActivity extends AppCompatActivity {
 
     void startTimerOrResumeTimer(){
 
-        findViewById(R.id.imageWorkout).setVisibility(ImageView.VISIBLE);
 
         TimerRunningActivity.timer = new CountDownTimer(TimerRunningActivity.timeIntervals.get(TimerRunningActivity.currentTimerIndex) * 1000, 1000) {
 
-
             public void onTick(long millisUntilFinished) {
                 ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, TimerRunningActivity.beepVolume);
-                TimerRunningActivity.timerValue = Long.valueOf(millisUntilFinished / 1000).intValue();
+                TimerRunningActivity.timerValue = Long.valueOf(Math.round(millisUntilFinished / 1000)).intValue();
                 TextView ctv = ((TextView)findViewById(R.id.currentTimeTextView));
                 String text = Integer.valueOf(TimerRunningActivity.timerValue).toString();
                 ctv.setText(text);
@@ -82,16 +82,29 @@ public class TimerRunningActivity extends AppCompatActivity {
                     toneLength = 150;
                 }
 
+                TimeMetaDataEnum currentMetaInfo = TimerRunningActivity.timeMetaData.get(TimerRunningActivity.currentTimerIndex);
+                ImageView imgGetReady = findViewById(R.id.imageGetReady);
                 ImageView imgW = findViewById(R.id.imageWorkout);
                 ImageView imgP = findViewById(R.id.imageSwitch);
-                if(TimerRunningActivity.currentTimerIndex % 2 == 0){
+                TextView textViewInstructionsText = findViewById(R.id.instructionsText);
+                if(currentMetaInfo.equals(TimeMetaDataEnum.GET_READY)) {
+                    imgGetReady.setVisibility(ImageView.VISIBLE);
+                    imgP.setVisibility(ImageView.INVISIBLE);
+                    imgW.setVisibility(ImageView.INVISIBLE);
+                    textViewInstructionsText.setText("get ready");
+                    toneGen1.startTone(ToneGenerator.TONE_CDMA_ONE_MIN_BEEP,toneLength);
+                } else if(currentMetaInfo.equals(TimeMetaDataEnum.WORKOUT)) {
                     imgW.setRotation(imgW.getRotation() + 45);
+                    imgGetReady.setVisibility(ImageView.INVISIBLE);
                     imgP.setVisibility(ImageView.INVISIBLE);
                     imgW.setVisibility(ImageView.VISIBLE);
-                    toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP,toneLength);
-                } else {
+                    textViewInstructionsText.setText("do exercise");
+                    toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, toneLength);
+                } else if(currentMetaInfo.equals(TimeMetaDataEnum.PAUSE)){
+                    imgGetReady.setVisibility(ImageView.INVISIBLE);
                     imgW.setVisibility(ImageView.INVISIBLE);
                     imgP.setVisibility(ImageView.VISIBLE);
+                    textViewInstructionsText.setText("pause");
                     toneGen1.startTone(ToneGenerator.TONE_CDMA_ONE_MIN_BEEP,toneLength);
                 }
 
@@ -110,6 +123,7 @@ public class TimerRunningActivity extends AppCompatActivity {
                     findViewById(R.id.imageWorkout).setVisibility(ImageView.INVISIBLE);
                     findViewById(R.id.imageDone).setVisibility(ImageView.VISIBLE);
                     findViewById(R.id.imageButtonPause).setVisibility(ImageView.INVISIBLE);
+                    ((TextView)findViewById(R.id.instructionsText)).setText("done");
                 }
             }
 
@@ -129,19 +143,23 @@ public class TimerRunningActivity extends AppCompatActivity {
         TimerRunningActivity.timeIntervals = new ArrayList<Integer>();
         TimerRunningActivity.timeMetaData = new ArrayList<TimeMetaDataEnum>();
 
-        findViewById(R.id.imageWorkout).setVisibility(ImageView.VISIBLE);
+        findViewById(R.id.imageWorkout).setVisibility(ImageView.INVISIBLE);
         findViewById(R.id.imageSwitch).setVisibility(ImageView.INVISIBLE);
         findViewById(R.id.imageDone).setVisibility(ImageView.INVISIBLE);
-        findViewById(R.id.imageGetReady).setVisibility(ImageView.INVISIBLE);
+        findViewById(R.id.imageGetReady).setVisibility(ImageView.VISIBLE);
 
         final WorkoutValues wv = WorkoutValues.loadValuesFromPreferences(TimerRunningActivity.this);
         TimerRunningActivity.workoutValues = wv;
 
+        // set timers
+        Integer getReady = Integer.valueOf(5);
+        TimerRunningActivity.timeIntervals.add(getReady);
+        TimerRunningActivity.timeMetaData.add(TimeMetaDataEnum.GET_READY);
         for(int i=0; i<wv.noOfSets; i++){
             Integer w = Integer.valueOf(wv.eTimeMin * 60 + wv.eTimeSec);
             TimerRunningActivity.timeIntervals.add(w);
             TimerRunningActivity.timeMetaData.add(TimeMetaDataEnum.WORKOUT);
-            // no breake in the end - just end it
+            // no brake in the end - just end it
             if(i < wv.noOfSets - 1){
                 Integer p = Integer.valueOf(wv.pTimeMin * 60 + wv.pTimeSec);
                 TimerRunningActivity.timeIntervals.add(p);
