@@ -17,6 +17,12 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/imageGetReady"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:src="@drawable/ic_mood_black_24dp" />
+
+            <ImageView
                 android:id="@+id/imageWorkout"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
@@ -26,13 +32,13 @@
                 android:id="@+id/imageDone"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                android:src="@drawable/ic_done_24px" />
+                android:src="@drawable/ic_sentiment_very_satisfied_black_24dp" />
 
             <ImageView
                 android:id="@+id/imageSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                android:src="@drawable/ic_transfer_within_a_station_24px" />
+                android:src="@drawable/ic_notifications_paused_black_24dp" />
 
         </FrameLayout>
 

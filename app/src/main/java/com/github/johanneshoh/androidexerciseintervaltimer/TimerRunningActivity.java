@@ -132,6 +132,7 @@ public class TimerRunningActivity extends AppCompatActivity {
         findViewById(R.id.imageWorkout).setVisibility(ImageView.VISIBLE);
         findViewById(R.id.imageSwitch).setVisibility(ImageView.INVISIBLE);
         findViewById(R.id.imageDone).setVisibility(ImageView.INVISIBLE);
+        findViewById(R.id.imageGetReady).setVisibility(ImageView.INVISIBLE);
 
         final WorkoutValues wv = WorkoutValues.loadValuesFromPreferences(TimerRunningActivity.this);
         TimerRunningActivity.workoutValues = wv;
