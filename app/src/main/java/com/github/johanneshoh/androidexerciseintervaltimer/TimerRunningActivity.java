@@ -91,7 +91,7 @@ public class TimerRunningActivity extends AppCompatActivity {
                     imgGetReady.setVisibility(ImageView.VISIBLE);
                     imgP.setVisibility(ImageView.INVISIBLE);
                     imgW.setVisibility(ImageView.INVISIBLE);
-                    textViewInstructionsText.setText(R.string.done);
+                    textViewInstructionsText.setText(R.string.get_ready);
                     toneGen1.startTone(ToneGenerator.TONE_CDMA_ONE_MIN_BEEP,toneLength);
                 } else if(currentMetaInfo.equals(TimeMetaDataEnum.WORKOUT)) {
                     imgW.setRotation(imgW.getRotation() + 45);
