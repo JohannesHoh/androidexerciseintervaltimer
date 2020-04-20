@@ -14,169 +14,112 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
 public class TimerRunningActivity extends AppCompatActivity {
 
+
+
     private static enum TimeMetaDataEnum {
         GET_READY, WORKOUT, PAUSE;
-
     }
 
+    private static boolean workoutValuesChanged = true;
+
+    private static ImageView imageViewWorkout;
+    private static ImageView imageViewPause;
+    private static ImageView imageViewDone;
+    private static ImageView imageViewGetReady;
+    private static ImageButton imageButtonPause;
+    private static ImageButton imageButtonPlay;
+
+    private static TextView textViewInstructions;
+    private static TextView textViewRemainingSets;
     private static WorkoutValues workoutValues = null;
     private static int beepVolume = 100;
-    static TextView currentTimeTv = null;
-    static CountDownTimer timer = null;
-    static boolean timerRunning = false;
-    static int timerValue = 0;
-    static int currentTimerIndex = 0;
-    static ArrayList<Integer> timeIntervals = null;
-    static ArrayList<TimeMetaDataEnum> timeMetaData = null;
+    private static TextView currentTimeTextView = null;
+    private static CountDownTimer timer = null;
+    private static int timerValue = 0;
+    private static int currentTimerIndex = 0;
+    private static ArrayList<Integer> timeIntervals = null;
+    private static ArrayList<TimeMetaDataEnum> timeMetaData = null;
 
-    private void reset(){
+    public static void reset(){
+        workoutValuesChanged = true;
+        imageViewWorkout = null;
+        imageViewPause = null;
+        imageViewDone = null;
+        imageViewGetReady = null;
+        imageButtonPause = null;
+        imageButtonPlay = null;
+        textViewInstructions = null;
+        textViewRemainingSets = null;
         workoutValues = null;
         beepVolume = 100;
         currentTimerIndex = 0;
-        currentTimeTv = null;
-        timerRunning = false;
+        currentTimeTextView = null;
         timerValue = 0;
         currentTimerIndex = 0;
-        timeIntervals = null;
-        timeMetaData = null;
         if(timer != null){
             timer.cancel();
             timer = null;
         }
-    }
-
-
-    private void updateRemainingSets() {
-        int workoutTimersRemaining = 0;
-        for(int i=TimerRunningActivity.currentTimerIndex; i<TimerRunningActivity.timeIntervals.size(); i++){
-            if(TimerRunningActivity.timeMetaData.get(i) == TimeMetaDataEnum.WORKOUT){
-                workoutTimersRemaining++;
-            }
-        }
-        TextView srtv = (TextView)findViewById(R.id.setsRemainaingTextView);
-        srtv.setText(Integer.valueOf(workoutTimersRemaining).toString());
-    }
-
-    void startTimerOrResumeTimer(){
-
-
-        TimerRunningActivity.timer = new CountDownTimer(TimerRunningActivity.timeIntervals.get(TimerRunningActivity.currentTimerIndex) * 1000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, TimerRunningActivity.beepVolume);
-                TimerRunningActivity.timerValue = Long.valueOf(Math.round(millisUntilFinished / 1000)).intValue();
-                TextView ctv = ((TextView)findViewById(R.id.currentTimeTextView));
-                String text = Integer.valueOf(TimerRunningActivity.timerValue).toString();
-                ctv.setText(text);
-
-                updateRemainingSets();
-
-                int toneLength = 150;
-                if(TimerRunningActivity.timerValue <= 3){
-                    toneLength = 150;
-                }
-
-                TimeMetaDataEnum currentMetaInfo = TimerRunningActivity.timeMetaData.get(TimerRunningActivity.currentTimerIndex);
-                ImageView imgGetReady = findViewById(R.id.imageGetReady);
-                ImageView imgW = findViewById(R.id.imageWorkout);
-                ImageView imgP = findViewById(R.id.imageSwitch);
-                TextView textViewInstructionsText = findViewById(R.id.instructionsText);
-                if(currentMetaInfo.equals(TimeMetaDataEnum.GET_READY)) {
-                    imgGetReady.setVisibility(ImageView.VISIBLE);
-                    imgP.setVisibility(ImageView.INVISIBLE);
-                    imgW.setVisibility(ImageView.INVISIBLE);
-                    textViewInstructionsText.setText(R.string.get_ready);
-                    toneGen1.startTone(ToneGenerator.TONE_CDMA_ONE_MIN_BEEP,toneLength);
-                } else if(currentMetaInfo.equals(TimeMetaDataEnum.WORKOUT)) {
-                    imgW.setRotation(imgW.getRotation() + 45);
-                    imgGetReady.setVisibility(ImageView.INVISIBLE);
-                    imgP.setVisibility(ImageView.INVISIBLE);
-                    imgW.setVisibility(ImageView.VISIBLE);
-                    textViewInstructionsText.setText(R.string.do_exercise);
-                    toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, toneLength);
-                } else if(currentMetaInfo.equals(TimeMetaDataEnum.PAUSE)){
-                    imgGetReady.setVisibility(ImageView.INVISIBLE);
-                    imgW.setVisibility(ImageView.INVISIBLE);
-                    imgP.setVisibility(ImageView.VISIBLE);
-                    textViewInstructionsText.setText(R.string.pause);
-                    toneGen1.startTone(ToneGenerator.TONE_CDMA_ONE_MIN_BEEP,toneLength);
-                }
-
-            }
-
-
-            public void onFinish() {
-                TimerRunningActivity.currentTimerIndex++;
-                TimerRunningActivity.timerRunning = false;
-                TimerRunningActivity.timerValue = 0;
-                updateRemainingSets();
-                if(TimerRunningActivity.currentTimerIndex < TimerRunningActivity.timeIntervals.size()){
-                    startTimerOrResumeTimer();
-                } else {
-                    findViewById(R.id.imageWorkout).setVisibility(ImageView.INVISIBLE);
-                    findViewById(R.id.imageDone).setVisibility(ImageView.VISIBLE);
-                    findViewById(R.id.imageButtonPause).setVisibility(ImageView.INVISIBLE);
-                    ((TextView)findViewById(R.id.instructionsText)).setText(R.string.done);
-                }
-            }
-
-        };
-        timer.start();
+        timeIntervals = new ArrayList<Integer>();
+        timeMetaData = new ArrayList<TimeMetaDataEnum>();
 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_timer_running);
+    private void init() {
 
-        reset();
+        workoutValues = WorkoutValues.loadValuesFromPreferences(this);
 
-        TimerRunningActivity.timeIntervals = new ArrayList<Integer>();
-        TimerRunningActivity.timeMetaData = new ArrayList<TimeMetaDataEnum>();
+        imageViewWorkout = findViewById(R.id.imageWorkout);
+        imageViewPause = findViewById(R.id.imageSwitch);
+        imageViewDone = findViewById(R.id.imageDone);
+        imageViewGetReady = findViewById(R.id.imageGetReady);
+        currentTimeTextView = findViewById(R.id.currentTimeTextView);
+        textViewInstructions = findViewById(R.id.instructionsText);
+        textViewRemainingSets = findViewById(R.id.setsRemainaingTextView);
+        imageButtonPause = findViewById(R.id.imageButtonPause);
+        imageButtonPlay = findViewById(R.id.imageButtonPlay);
 
-        findViewById(R.id.imageWorkout).setVisibility(ImageView.INVISIBLE);
-        findViewById(R.id.imageSwitch).setVisibility(ImageView.INVISIBLE);
-        findViewById(R.id.imageDone).setVisibility(ImageView.INVISIBLE);
-        findViewById(R.id.imageGetReady).setVisibility(ImageView.VISIBLE);
-
-        final WorkoutValues wv = WorkoutValues.loadValuesFromPreferences(TimerRunningActivity.this);
-        TimerRunningActivity.workoutValues = wv;
-
-        // set timers
-        Integer getReady = Integer.valueOf(5);
-        TimerRunningActivity.timeIntervals.add(getReady);
-        TimerRunningActivity.timeMetaData.add(TimeMetaDataEnum.GET_READY);
-        for(int i=0; i<wv.noOfSets; i++){
-            Integer w = Integer.valueOf(wv.eTimeMin * 60 + wv.eTimeSec);
-            TimerRunningActivity.timeIntervals.add(w);
-            TimerRunningActivity.timeMetaData.add(TimeMetaDataEnum.WORKOUT);
-            // no brake in the end - just end it
-            if(i < wv.noOfSets - 1){
-                Integer p = Integer.valueOf(wv.pTimeMin * 60 + wv.pTimeSec);
-                TimerRunningActivity.timeIntervals.add(p);
-                TimerRunningActivity.timeMetaData.add(TimeMetaDataEnum.PAUSE);
-            }
-        }
-
-        updateRemainingSets();
-
-        TimerRunningActivity.currentTimeTv = findViewById(R.id.currentTimeTextView);
-        final ImageButton imageButtonPause = findViewById(R.id.imageButtonPause);
-        final ImageButton imageButtonPlay = findViewById(R.id.imageButtonPlay);
+        imageViewWorkout.setVisibility(ImageView.INVISIBLE);
+        imageViewPause.setVisibility(ImageView.INVISIBLE);
+        imageViewDone.setVisibility(ImageView.INVISIBLE);
+        imageViewGetReady.setVisibility(ImageView.VISIBLE);
 
         imageButtonPause.setVisibility(ImageView.INVISIBLE);
 
-        String tv = TimerRunningActivity.timeIntervals.get(0).toString();
-        TimerRunningActivity.currentTimeTv.setText(tv);
+        // set timers
+        if(timeMetaData == null || timeMetaData.size() == 0){
+            Integer getReady = Integer.valueOf(5);
+            timeIntervals.add(getReady);
+            timeMetaData.add(TimeMetaDataEnum.GET_READY);
+            for(int i=0; i<workoutValues.noOfSets; i++){
+                Integer w = Integer.valueOf(workoutValues.eTimeMin * 60 + workoutValues.eTimeSec);
+                timeIntervals.add(w);
+                timeMetaData.add(TimeMetaDataEnum.WORKOUT);
+                // no brake in the end - just end it
+                if(i < workoutValues.noOfSets - 1){
+                    Integer p = Integer.valueOf(workoutValues.pTimeMin * 60 + workoutValues.pTimeSec);
+                    timeIntervals.add(p);
+                    timeMetaData.add(TimeMetaDataEnum.PAUSE);
+                }
+            }
+        }
 
+        if(timer == null){
+            imageButtonPlay.setVisibility(ImageView.VISIBLE);
+            imageButtonPause.setVisibility(ImageView.INVISIBLE);
+        } else {
+            imageButtonPlay.setVisibility(ImageView.INVISIBLE);
+            imageButtonPause.setVisibility(ImageView.VISIBLE);
+        }
+
+
+        String tv = timeIntervals.get(currentTimerIndex).toString();
+        currentTimeTextView.setText(tv);
 
         SeekBar seekBar = findViewById(R.id.seekBar);
         seekBar.setMax(100);
@@ -196,15 +139,17 @@ public class TimerRunningActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                TimerRunningActivity.beepVolume = this.progress;
+                beepVolume = this.progress;
             }
         });
+
+        if(!workoutValuesChanged){
+            seekBar.setProgress(beepVolume);
+        }
 
         imageButtonPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                TimerRunningActivity.timerRunning = true;
                 startTimerOrResumeTimer();
                 imageButtonPlay.setVisibility(ImageView.INVISIBLE);
                 imageButtonPause.setVisibility(ImageView.VISIBLE);
@@ -214,14 +159,108 @@ public class TimerRunningActivity extends AppCompatActivity {
         imageButtonPause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimerRunningActivity.timerRunning = false;
-                TimerRunningActivity.timer.cancel();
-                TimerRunningActivity.timeIntervals.set(TimerRunningActivity.currentTimerIndex,TimerRunningActivity.timerValue);
+                timer.cancel();
+                timer = null;
+                timeIntervals.set(currentTimerIndex,timerValue);
                 imageButtonPlay.setVisibility(ImageView.VISIBLE);
                 imageButtonPause.setVisibility(ImageView.INVISIBLE);
             }
         });
+    }
 
+
+    private void updateRemainingSets() {
+        int workoutTimersRemaining = 0;
+        for(int i=currentTimerIndex; i<timeIntervals.size(); i++){
+            if(timeMetaData.get(i) == TimeMetaDataEnum.WORKOUT){
+                workoutTimersRemaining++;
+            }
+        }
+        textViewRemainingSets.setText(Integer.valueOf(workoutTimersRemaining).toString());
+    }
+
+    void startTimerOrResumeTimer(){
+
+        if(timer != null){
+            timer.cancel();
+        }
+
+        if(timerValue == 0){
+            timerValue = timeIntervals.get(currentTimerIndex) * 1000;
+        }
+
+        timer = new CountDownTimer(timerValue, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, beepVolume);
+                timerValue = Long.valueOf(Math.round(millisUntilFinished / 1000)).intValue();
+                String text = Integer.valueOf(timerValue).toString();
+                currentTimeTextView.setText(text);
+
+                updateRemainingSets();
+
+                int toneLength = 150;
+                if(timerValue <= 3){
+                    toneLength = 150;
+                }
+
+                TimeMetaDataEnum currentMetaInfo = timeMetaData.get(currentTimerIndex);
+                if(currentMetaInfo.equals(TimeMetaDataEnum.GET_READY)) {
+                    imageViewGetReady.setVisibility(ImageView.VISIBLE);
+                    imageViewPause.setVisibility(ImageView.INVISIBLE);
+                    imageViewWorkout.setVisibility(ImageView.INVISIBLE);
+                    textViewInstructions.setText(R.string.get_ready);
+                    toneGen1.startTone(ToneGenerator.TONE_CDMA_ONE_MIN_BEEP,toneLength);
+                } else if(currentMetaInfo.equals(TimeMetaDataEnum.WORKOUT)) {
+                    imageViewWorkout.setRotation(imageViewWorkout.getRotation() + 45);
+                    imageViewGetReady.setVisibility(ImageView.INVISIBLE);
+                    imageViewPause.setVisibility(ImageView.INVISIBLE);
+                    imageViewWorkout.setVisibility(ImageView.VISIBLE);
+                    textViewInstructions.setText(R.string.do_exercise);
+                    toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, toneLength);
+                } else if(currentMetaInfo.equals(TimeMetaDataEnum.PAUSE)){
+                    imageViewGetReady.setVisibility(ImageView.INVISIBLE);
+                    imageViewPause.setVisibility(ImageView.VISIBLE);
+                    imageViewWorkout.setVisibility(ImageView.INVISIBLE);
+                    textViewInstructions.setText(R.string.pause);
+                    toneGen1.startTone(ToneGenerator.TONE_CDMA_ONE_MIN_BEEP,toneLength);
+                }
+
+            }
+
+
+            public void onFinish() {
+                currentTimerIndex++;
+                timerValue = 0;
+                updateRemainingSets();
+                if(currentTimerIndex < timeIntervals.size()){
+                    startTimerOrResumeTimer();
+                } else {
+                    imageViewWorkout.setVisibility(ImageView.INVISIBLE);
+                    imageViewDone.setVisibility(ImageView.VISIBLE);
+                    imageViewPause.setVisibility(ImageView.INVISIBLE);
+                    textViewInstructions.setText(R.string.done);
+                }
+            }
+
+        };
+        timer.start();
 
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_timer_running);
+
+        init();
+        if(workoutValuesChanged == false && timer != null){
+            startTimerOrResumeTimer();
+        }
+        workoutValuesChanged = false;
+
+        updateRemainingSets();
+    }
+
 }

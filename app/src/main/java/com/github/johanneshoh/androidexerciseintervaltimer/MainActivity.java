@@ -43,11 +43,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        // in case the back button is pressed we need to reset all potentially running timers
+        TimerRunningActivity.reset();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         numberOfSetsText = findViewById(R.id.numberOfSetsText);
         exerciseTimeMinNumberPickerView = findViewById(R.id.exerciseTimeMinNumberPicker);
@@ -115,6 +123,7 @@ public class MainActivity extends AppCompatActivity {
                 int pTimeSec = pauseTimeSecNumberPickerView.getValue();
                 WorkoutValues wv = new WorkoutValues("", noOfSets, eTimeMin, eTimeSec, pTimeMin, pTimeSec);
                 WorkoutValues.saveValuesToPreferences(MainActivity.this, wv);
+                TimerRunningActivity.reset();
                 startActivity(intent);
             }
         });
