@@ -15,7 +15,7 @@
         <fragment
             android:id="@+id/fragment_main_set_sets"
             android:name="com.github.johanneshoh.androidexerciseintervaltimer.MainSetSetsFragment"
-            android:layout_width="600dp"
+            android:layout_width="match_parent"
             android:layout_height="100dp" />
 
         <LinearLayout
@@ -42,11 +42,17 @@
                 android:layout_width="300dp"
                 android:layout_height="match_parent" />
 
-            <Button
-                android:id="@+id/buttonStart"
+            <LinearLayout
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
-                android:text="start" />
+                android:gravity="left">
+
+                <Button
+                    android:id="@+id/buttonStart"
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:text="start" />
+            </LinearLayout>
 
         </LinearLayout>
 
