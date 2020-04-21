@@ -11,4 +11,5 @@
     <string name="excercise_time_headline">ÜBUNGSZEIT</string>
     <string name="pause_time_headline">PAUSENZEIT</string>
     <string name="sets">Wiederholungen</string>
+    <string name="half_done">half way :-)</string>
 </resources>

@@ -8,6 +8,7 @@ import android.media.ToneGenerator;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -198,33 +199,66 @@ public class TimerRunningActivity extends AppCompatActivity {
                 currentTimeTextView.setText(text);
 
                 updateRemainingSets();
+                
+                int toneLength0sec = 500;
+                int toneType0sec = ToneGenerator.TONE_CDMA_PIP;
 
                 int toneLength = 150;
-                if(timerValue <= 3){
-                    toneLength = 150;
+                int toneType = 0;
+
+                if(timerValue == 0){
+                    toneLength = toneLength0sec;
+                    toneType = toneType0sec;
                 }
 
                 TimeMetaDataEnum currentMetaInfo = timeMetaData.get(currentTimerIndex);
+
+                int timerValue100 = timeIntervals.get(currentTimerIndex);
+
                 if(currentMetaInfo.equals(TimeMetaDataEnum.GET_READY)) {
                     imageViewGetReady.setVisibility(ImageView.VISIBLE);
                     imageViewPause.setVisibility(ImageView.INVISIBLE);
                     imageViewWorkout.setVisibility(ImageView.INVISIBLE);
                     textViewInstructions.setText(R.string.get_ready);
-                    toneGen1.startTone(ToneGenerator.TONE_CDMA_ONE_MIN_BEEP,toneLength);
+                    toneType = ToneGenerator.TONE_CDMA_PIP;
+                    toneGen1.startTone(toneType, toneLength);
                 } else if(currentMetaInfo.equals(TimeMetaDataEnum.WORKOUT)) {
                     imageViewWorkout.setRotation(imageViewWorkout.getRotation() + 45);
                     imageViewGetReady.setVisibility(ImageView.INVISIBLE);
                     imageViewPause.setVisibility(ImageView.INVISIBLE);
                     imageViewWorkout.setVisibility(ImageView.VISIBLE);
                     textViewInstructions.setText(R.string.do_exercise);
-                    toneGen1.startTone(ToneGenerator.TONE_CDMA_PIP, toneLength);
+
+                    // is the timer value at least 4 seconds? (for less than this a half time beep
+                    // seems to be useless...
+                    if(timerValue != 0) {
+                        toneType = ToneGenerator.TONE_CDMA_ONE_MIN_BEEP;
+                        if (timerValue100 >= 4) {
+                            // is it half time?
+                            if (Math.round(timerValue100 - timerValue) == Math.round(timerValue100 / 2)) {
+                                Log.d("DEBUG_TRA", "half round");
+                                toneLength = toneLength * 3;
+                            }
+                            if (Math.round(timerValue100 - timerValue) >= Math.round(timerValue100 / 2)) {
+                                textViewInstructions.setText(R.string.half_done);
+                            }
+                        }
+                    }
+
+                    toneGen1.startTone(toneType, toneLength);
                 } else if(currentMetaInfo.equals(TimeMetaDataEnum.PAUSE)){
                     imageViewGetReady.setVisibility(ImageView.INVISIBLE);
                     imageViewPause.setVisibility(ImageView.VISIBLE);
                     imageViewWorkout.setVisibility(ImageView.INVISIBLE);
                     textViewInstructions.setText(R.string.pause);
-                    toneGen1.startTone(ToneGenerator.TONE_CDMA_ONE_MIN_BEEP,toneLength);
+                    toneType = ToneGenerator.TONE_CDMA_PIP;
+                    toneGen1.startTone(toneType, toneLength);
                 }
+
+
+                Log.d("DEBUG_TRA", "timerValue: " + timerValue
+                        + " toneLength: " + toneLength
+                        + " toneType: " + toneType);
 
             }
 

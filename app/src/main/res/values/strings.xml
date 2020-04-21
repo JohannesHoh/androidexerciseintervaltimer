@@ -10,4 +10,5 @@
     <string name="excercise_time_headline">EXCERCISE TIME</string>
     <string name="pause_time_headline">PAUSE TIME</string>
     <string name="sets">sets</string>
+    <string name="half_done">Die Hälfte ist geschafft :-)</string>
 </resources>
