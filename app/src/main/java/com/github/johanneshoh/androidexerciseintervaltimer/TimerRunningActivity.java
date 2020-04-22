@@ -38,6 +38,7 @@ public class TimerRunningActivity extends AppCompatActivity {
     private static TextView textViewRemainingSets;
     private static WorkoutValues workoutValues = null;
     private static int beepVolume = 100;
+    private static int lastBeepVolume = 100;
     private static TextView currentTimeTextView = null;
     private static CountDownTimer timer = null;
     private static int timerValue = 0;
@@ -45,6 +46,8 @@ public class TimerRunningActivity extends AppCompatActivity {
     private static ArrayList<Integer> timeIntervals = null;
     private static ArrayList<TimeMetaDataEnum> timeMetaData = null;
 
+    private static ToneGenerator toneGen = null;
+    
     public static void reset(){
         workoutValuesChanged = true;
         imageViewWorkout = null;
@@ -70,7 +73,6 @@ public class TimerRunningActivity extends AppCompatActivity {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void init() {
 
         workoutValues = WorkoutValues.loadValuesFromPreferences(this);
@@ -124,7 +126,6 @@ public class TimerRunningActivity extends AppCompatActivity {
 
         SeekBar seekBar = findViewById(R.id.seekBar);
         seekBar.setMax(100);
-        seekBar.setMin(0);
         seekBar.setProgress(100);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int progress = 0;
@@ -162,7 +163,6 @@ public class TimerRunningActivity extends AppCompatActivity {
             public void onClick(View v) {
                 timer.cancel();
                 timer = null;
-                timeIntervals.set(currentTimerIndex,timerValue);
                 imageButtonPlay.setVisibility(ImageView.VISIBLE);
                 imageButtonPause.setVisibility(ImageView.INVISIBLE);
             }
@@ -182,18 +182,31 @@ public class TimerRunningActivity extends AppCompatActivity {
 
     void startTimerOrResumeTimer(){
 
+        Log.d("DEBUG_TRA", "startTimerOrResumeTimer ");
+
+        Log.d("DEBUG_TRA", "timerValue: " + timerValue
+                + " timer: " + timer);
+
         if(timer != null){
             timer.cancel();
         }
 
         if(timerValue == 0){
-            timerValue = timeIntervals.get(currentTimerIndex) * 1000;
+            timerValue = timeIntervals.get(currentTimerIndex);
         }
 
-        timer = new CountDownTimer(timerValue, 1000) {
+        timer = new CountDownTimer(timerValue * 1000, 1000) {
 
             public void onTick(long millisUntilFinished) {
-                ToneGenerator toneGen1 = new ToneGenerator(AudioManager.STREAM_MUSIC, beepVolume);
+                Log.d("DEBUG_TRA", "OnTick called");
+                try {
+                    if(toneGen == null || beepVolume != lastBeepVolume)
+                    toneGen = new ToneGenerator(AudioManager.STREAM_MUSIC, beepVolume);
+                    lastBeepVolume = beepVolume;
+                } catch (RuntimeException e){
+                    // not sure why that happens on old devices with API lower than 27
+                    Log.e("DEBUG_TRA", "Exception caught " + e.getStackTrace());
+                }
                 timerValue = Long.valueOf(Math.round(millisUntilFinished / 1000)).intValue();
                 String text = Integer.valueOf(timerValue).toString();
                 currentTimeTextView.setText(text);
@@ -221,7 +234,6 @@ public class TimerRunningActivity extends AppCompatActivity {
                     imageViewWorkout.setVisibility(ImageView.INVISIBLE);
                     textViewInstructions.setText(R.string.get_ready);
                     toneType = ToneGenerator.TONE_CDMA_PIP;
-                    toneGen1.startTone(toneType, toneLength);
                 } else if(currentMetaInfo.equals(TimeMetaDataEnum.WORKOUT)) {
                     imageViewWorkout.setRotation(imageViewWorkout.getRotation() + 45);
                     imageViewGetReady.setVisibility(ImageView.INVISIBLE);
@@ -245,14 +257,29 @@ public class TimerRunningActivity extends AppCompatActivity {
                         }
                     }
 
-                    toneGen1.startTone(toneType, toneLength);
                 } else if(currentMetaInfo.equals(TimeMetaDataEnum.PAUSE)){
                     imageViewGetReady.setVisibility(ImageView.INVISIBLE);
                     imageViewPause.setVisibility(ImageView.VISIBLE);
                     imageViewWorkout.setVisibility(ImageView.INVISIBLE);
                     textViewInstructions.setText(R.string.pause);
                     toneType = ToneGenerator.TONE_CDMA_PIP;
-                    toneGen1.startTone(toneType, toneLength);
+                }
+
+
+                if(timerValue == 0){
+                    Log.d("DEBUG_TRA", "timerValue is 0");
+                    // on finish is also called when timer.cancel() is called but in that case
+                    // time is not really over, yet...
+                    currentTimerIndex++;
+                    updateRemainingSets();
+                    if (currentTimerIndex < timeIntervals.size()) {
+                        startTimerOrResumeTimer();
+                    } else {
+                        imageViewWorkout.setVisibility(ImageView.INVISIBLE);
+                        imageViewDone.setVisibility(ImageView.VISIBLE);
+                        imageViewPause.setVisibility(ImageView.INVISIBLE);
+                        textViewInstructions.setText(R.string.done);
+                    }
                 }
 
 
@@ -260,21 +287,14 @@ public class TimerRunningActivity extends AppCompatActivity {
                         + " toneLength: " + toneLength
                         + " toneType: " + toneType);
 
+                if(toneGen != null){
+                    toneGen.startTone(toneType, toneLength);
+                }
+
             }
 
 
             public void onFinish() {
-                currentTimerIndex++;
-                timerValue = 0;
-                updateRemainingSets();
-                if(currentTimerIndex < timeIntervals.size()){
-                    startTimerOrResumeTimer();
-                } else {
-                    imageViewWorkout.setVisibility(ImageView.INVISIBLE);
-                    imageViewDone.setVisibility(ImageView.VISIBLE);
-                    imageViewPause.setVisibility(ImageView.INVISIBLE);
-                    textViewInstructions.setText(R.string.done);
-                }
             }
 
         };
@@ -282,7 +302,7 @@ public class TimerRunningActivity extends AppCompatActivity {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

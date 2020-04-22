@@ -28,13 +28,13 @@
             android:id="@+id/fragment_main_set_times1"
             android:name="com.github.johanneshoh.androidexerciseintervaltimer.MainSetTimes1Fragment"
             android:layout_width="match_parent"
-            android:layout_height="250dp" />
+            android:layout_height="200dp" />
 
         <fragment
             android:id="@+id/fragment_main_set_times2"
             android:name="com.github.johanneshoh.androidexerciseintervaltimer.MainSetTimes2Fragment"
             android:layout_width="match_parent"
-            android:layout_height="250dp" />
+            android:layout_height="200dp" />
 
         <Button
             android:id="@+id/buttonStart"

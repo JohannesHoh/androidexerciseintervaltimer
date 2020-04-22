@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         exerciseTimeMinNumberPickerView.setMinValue(0);
         exerciseTimeMinNumberPickerView.setMaxValue(99);
 
-        exerciseTimeSecNumberPickerView.setMinValue(1);
+        exerciseTimeSecNumberPickerView.setMinValue(0);
         exerciseTimeSecNumberPickerView.setMaxValue(59);
 
 
